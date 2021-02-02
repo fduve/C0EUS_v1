@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import string
+import numpy as np
 '''
 Doc
 '''
@@ -91,6 +92,9 @@ def words_list_cleansing(words_list):
     '''
     words_list = words_list 
     special_character_list = list(string.punctuation)
+    for tmpi in range(0,10):
+        to_add = str(tmpi)
+        special_character_list.append(to_add)
     #print(len(words_list))
 
     for i in range(0, len(words_list)):
@@ -129,6 +133,37 @@ def remove_spaces_from_list(word_list):
     print('New total count is {} words'.format(len(word_list)))
     return(word_list)
 
+def get_vocab(word_list):
+    '''
+    
+
+    Parameters
+    ----------
+    word_list : list
+        Contains all the words on the corpus, repeated, not singularized.
+
+    Returns
+    -------
+    d_vocab : dict
+        Contains a dict of unique elements (words) which appeared in the 
+        corpus. This function also removes the spaces.
+
+    '''
+    vocab = set(word_list)
+    vocab.remove('')
+    ##vocab.remove(' ')
+    
+    idx = 0
+    d_vocab = {}
+    for word in vocab:
+        d_value = word
+        d_key = idx
+        d_vocab[d_key] = d_value
+        idx += 1   
+    
+    print('Vocabulary size: {}'.format(len(d_vocab)))
+    return d_vocab
+
 
 def clean_lines(listed_lines):
     '''
@@ -147,31 +182,75 @@ def clean_lines(listed_lines):
 
     '''
     special_character_list = list(string.punctuation)
+    for tmpi in range(0,10):
+        to_add = str(tmpi)
+        special_character_list.append(to_add)
+        
     clean_lines = []
     
     for i in range(0, len(listed_lines)):
         current_line = listed_lines[i]
-        print(current_line)
+        #print(current_line)
 
         for banned_symbol in special_character_list:
             current_line = current_line.replace(banned_symbol, '')
-            print(current_line)
+            #print(current_line)
         clean_lines.append(current_line)
-        
-                
+    
     return clean_lines
 
-'''
-Uncomment the following lines to start the processes
-'''
 
-#one = read_file()
-#two = split_file_content(one)
-#three = singularizing_words(two)
-#four = words_list_cleansing(three)
+def words_frequency(vocab_set, cleansed_phrases):
+    '''
+    
+
+    Parameters
+    ----------
+    vocab_set : set
+        Contains the words of the corpus, singularized, which now are going to be counted.
+    cleansed_phrases : list
+        Contains the clean corpus.
+
+    Returns
+    -------
+    None.
+
+    '''
+    
+    vocab_set_len = len(vocab_set)
+    cleansed_phrases_len = len(cleansed_phrases)
+    
+    print('2D array dimensions: ({},{})'.format(cleansed_phrases_len, vocab_set_len))
+    freq_matrix = np.zeros((cleansed_phrases_len, vocab_set_len), dtype = int)
+    
+    #print(freq_matrix)
+    print(type(freq_matrix))
+    print(freq_matrix[1][4])
+    
+    return freq_matrix
+
+#Part 1: Clean the data. Get words and phrases.
+plain_text = read_file()
+corpus = split_file_content(plain_text)
+repeated_words = singularizing_words(corpus)
+repeated_words = words_list_cleansing(repeated_words)
 #five = remove_spaces_from_list(four)
-#cleansed_phrases = clean_lines(two)
+vocab_set = get_vocab(repeated_words)
+cleansed_phrases = clean_lines(corpus) 
 
+#Part 2: Get frequencies.
+
+words_frequency(vocab_set, cleansed_phrases)
+
+
+
+'''
+def main(): 
+    return 0
+
+if __name__ == '__main__':
+    main()
+'''
 
 
 
