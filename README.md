@@ -3,6 +3,7 @@ No specialized libraries used to get a text file, split it and get the words. Fo
 
 v0.01: After uploading the first version, noticed that forgot to delete the line for importing a custom library, so, in order for it to work,
 just delete the custom import line.
+
 v0.10: Implements the use of pandas and numpy to get an array with frequencies, and optionally, the name of the word which is getting the frequency of, useful for a first approach to data examination.
 
 
