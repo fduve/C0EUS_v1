@@ -4,6 +4,7 @@ import sys
 import time
 import string
 import numpy as np
+import pandas as pd
 '''
 Doc
 '''
@@ -15,7 +16,8 @@ def concatenate_list_data(characters_list):
     return result
 
 def read_file():
-    file_name = input('File name w/extension, which is in this folder:\n')
+    #file_name = input('File name w/extension, which is in this folder:\n')
+    file_name = 'sample.txt'
     with open("./{}".format(file_name), 'r+') as init_file:
         file_content = init_file.read()
     time.sleep(1)
@@ -151,13 +153,13 @@ def get_vocab(word_list):
     '''
     vocab = set(word_list)
     vocab.remove('')
-    ##vocab.remove(' ')
+    #vocab.remove(' ')
     
     idx = 0
     d_vocab = {}
     for word in vocab:
-        d_value = word
-        d_key = idx
+        d_key = word
+        d_value = idx
         d_vocab[d_key] = d_value
         idx += 1   
     
@@ -221,13 +223,63 @@ def words_frequency(vocab_set, cleansed_phrases):
     cleansed_phrases_len = len(cleansed_phrases)
     
     print('2D array dimensions: ({},{})'.format(cleansed_phrases_len, vocab_set_len))
-    freq_matrix = np.zeros((cleansed_phrases_len, vocab_set_len), dtype = int)
-    
+    freq_matrix = np.zeros((cleansed_phrases_len, vocab_set_len), dtype = int) 
     #print(freq_matrix)
     print(type(freq_matrix))
-    print(freq_matrix[1][4])
+    
+    
+    phrase = ''
+    word = ''
+    i = 0
+    
+    for phrase in cleansed_phrases:
+        current_phrase = phrase
+        j = 0
+        
+        for word in vocab_set:
+            current_word = word
+            print(current_word)
+            
+            word_ocurrencies = current_phrase.count(current_word)
+            freq_matrix[i][j] = int(word_ocurrencies)
+            
+            word_ocurrencies = 0
+            j += 1
+        i += 1
+        
+    user_type_choice = input('Name the columns? (y/n)')
+    if (user_type_choice == 'y'):
+        freq_matrix = column_names_ndarray(freq_matrix)
+    else:
+        pass
     
     return freq_matrix
+
+def column_names_ndarray(freq_matrix):
+    '''
+    
+
+    Parameters
+    ----------
+    freq_matrix : ndarray
+        Totally functional ndarray containing the frequencies of the words.
+
+    Returns
+    -------
+    df : dataframe
+        contains the frequencies, but has the representing word
+        as name in the top of the column.
+
+    '''
+    
+    list_tmp = []
+    df = pd.DataFrame(freq_matrix)
+    
+    for word in vocab_set:
+        list_tmp.append(word)
+    df.columns = list_tmp
+    
+    return df
 
 #Part 1: Clean the data. Get words and phrases.
 plain_text = read_file()
@@ -240,7 +292,7 @@ cleansed_phrases = clean_lines(corpus)
 
 #Part 2: Get frequencies.
 
-words_frequency(vocab_set, cleansed_phrases)
+freq_matrix = words_frequency(vocab_set, cleansed_phrases)
 
 
 
@@ -251,6 +303,7 @@ def main():
 if __name__ == '__main__':
     main()
 '''
+
 
 
 
