@@ -4,6 +4,8 @@ No specialized libraries used to get a text file, split it and get the words. Fo
 version 0.01: After uploading the first version, noticed that forgot to delete the line for importing a custom library, so, in order for it to work,
 just delete the custom import line.
 
+version 0.02: Implements the use of pandas and numpy to get an array with frequencies, and optionally, the name of the word which is getting the frequency of.
+
 
 The scripts works by selecting a text file, both in the same folder. If the text file fulfill the following requierement: (1) All lines are
 separated from each other by a ('\n') or a jump line, then it is ready to work.
