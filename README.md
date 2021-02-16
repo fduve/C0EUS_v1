@@ -1,5 +1,5 @@
 # words_preprocessing01
-No specialized libraries used to get a text file, split it and get the words. For the next code's improvements, it is on mind that it will take the word's frequencies and perform some preliminar processing to get some first insights about the corpus to work.
+For the next code's improvements, it is on mind that it will take the word's frequencies and perform some preliminar processing to get some first insights about the corpus to work.
 
 v0.01: After uploading the first version, noticed that forgot to delete the line for importing a custom library, so, in order for it to work,
 just delete the custom import line.
