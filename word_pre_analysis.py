@@ -1,4 +1,3 @@
-import miscellaneous_features as mf
 import os
 import sys
 import time
@@ -197,18 +196,22 @@ def clean_lines(listed_lines):
         for banned_symbol in special_character_list:
             current_line = current_line.replace(banned_symbol, '')
             #print(current_line)
-        clean_lines.append(current_line)
+            
+        if (current_line == '' or current_line == ' '):
+            pass
+        else:
+            clean_lines.append(current_line.lower())
     
     return clean_lines
 
 
-def words_frequency(vocab_set, cleansed_phrases):
+def words_frequency(vocab_dict, cleansed_phrases):
     '''
     
 
     Parameters
     ----------
-    vocab_set : set
+    vocab_dict : set
         Contains the words of the corpus, singularized, which now are going to be counted.
     cleansed_phrases : list
         Contains the clean corpus.
@@ -219,7 +222,7 @@ def words_frequency(vocab_set, cleansed_phrases):
 
     '''
     
-    vocab_set_len = len(vocab_set)
+    vocab_set_len = len(vocab_dict)
     cleansed_phrases_len = len(cleansed_phrases)
     
     print('2D array dimensions: ({},{})'.format(cleansed_phrases_len, vocab_set_len))
@@ -236,9 +239,9 @@ def words_frequency(vocab_set, cleansed_phrases):
         current_phrase = phrase
         j = 0
         
-        for word in vocab_set:
+        for word in vocab_dict:
             current_word = word
-            print(current_word)
+            #print(current_word)
             
             word_ocurrencies = current_phrase.count(current_word)
             freq_matrix[i][j] = int(word_ocurrencies)
@@ -272,14 +275,57 @@ def column_names_ndarray(freq_matrix):
 
     '''
     
-    list_tmp = []
+    l_tmp = []
     df = pd.DataFrame(freq_matrix)
     
-    for word in vocab_set:
-        list_tmp.append(word)
-    df.columns = list_tmp
+    for word in vocab_dict:
+        l_tmp.append(word)
+    df.columns = l_tmp
     
     return df
+
+
+def ranked_words(freq_matrix, vocab_dict):
+    '''
+    
+
+    Parameters
+    ----------
+    freq_matrix : dataframe
+        Contains all the rows (corresponding to the sentences),
+        and the words, creating a frequence matrix.
+    vocab_dict : dictionary
+        Contains all the words. The pair also contains the  "id"
+        of the word.
+
+    Returns
+    -------
+    df_words_freq : dataframe
+        Frequencies of every word on the dictionary "vocab_dict".
+    total_word_count : int
+        The total word count.
+
+    '''
+    
+    df_words_freq = pd.DataFrame()
+    l_tmp_words = []
+    l_tmp_counts = []
+    
+    for word in vocab_dict:
+        l_tmp_words.append(word)
+    
+    for word in l_tmp_words:
+        l_tmp_counts.append(freq_matrix[word].sum())
+
+    df_words_freq.insert(0, 'word', l_tmp_words, False)
+    df_words_freq.insert(1, 'count', l_tmp_counts, True)   
+    
+    total_word_count = df_words_freq['count'].sum()
+
+        
+    return df_words_freq, total_word_count
+
+
 
 #Part 1: Clean the data. Get words and phrases.
 plain_text = read_file()
@@ -287,12 +333,13 @@ corpus = split_file_content(plain_text)
 repeated_words = singularizing_words(corpus)
 repeated_words = words_list_cleansing(repeated_words)
 #five = remove_spaces_from_list(four)
-vocab_set = get_vocab(repeated_words)
+vocab_dict = get_vocab(repeated_words)
 cleansed_phrases = clean_lines(corpus) 
 
 #Part 2: Get frequencies.
 
-freq_matrix = words_frequency(vocab_set, cleansed_phrases)
+freq_matrix = words_frequency(vocab_dict, cleansed_phrases)
+words_freq, total_word_count = ranked_words(freq_matrix, vocab_dict)
 
 
 
@@ -303,6 +350,7 @@ def main():
 if __name__ == '__main__':
     main()
 '''
+
 
 
 
